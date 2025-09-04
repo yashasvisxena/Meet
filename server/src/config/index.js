@@ -2,6 +2,19 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+// Validate critical environment variables
+const requiredEnvVars = [
+  'MONGODB_URI',
+  'ACCESS_TOKEN_SECRET',
+  'REFRESH_TOKEN_SECRET'
+];
+
+for (const envVar of requiredEnvVars) {
+  if (!process.env[envVar]) {
+    throw new Error(`Missing required environment variable: ${envVar}`);
+  }
+}
+
 export const config = {
   port: process.env.PORT || 8000,
   socketPort: process.env.PORT2 || 5000,

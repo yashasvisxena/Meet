@@ -29,7 +29,9 @@ export class UserService {
       delete userData.phoneNumber;
     }
     const user = await User.create(userData);
-    return await User.findById(user._id).select("-password -refreshToken");
+    const { password, refreshToken, ...userWithoutSensitiveData } =
+      user.toObject();
+    return userWithoutSensitiveData;
   }
 
   static async updateRefreshToken(userId, refreshToken) {
