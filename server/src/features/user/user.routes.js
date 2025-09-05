@@ -5,16 +5,11 @@ import {
   refreshAccessToken,
   logoutUser,
   getCurrentUser,
-  googleAuth,
-  googleCallback,
-  googleVerify,
-  googleSuccess,
-} from "../controllers/user.controller.js";
-import { upload } from "../middlewares/multer.middleware.js";
-import { verifyJWT } from "../middlewares/auth.middleware.js";
-import { validate } from "../middlewares/validation.middleware.js";
-import { registerSchema, loginSchema } from "../validators/user.validator.js";
-import passport from "../config/passport.js";
+} from "./user.controller.js";
+import { upload } from "../../middlewares/multer.middleware.js";
+import { verifyJWT } from "./auth.middleware.js";
+import { validate } from "../../middlewares/validation.middleware.js";
+import { registerSchema, loginSchema } from "./user.validator.js";
 
 const userRouter = Router();
 

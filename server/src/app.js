@@ -1,7 +1,6 @@
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import session from "express-session";
 import logger from "./utils/logger.js";
 import morgan from "morgan";
 import errorHandler from "./middlewares/error.middleware.js";
@@ -38,21 +37,8 @@ app.use(express.static("public"));
 
 app.use(cookieParser());
 
-// Session configuration for passport
-app.use(
-  session({
-    secret: config.session.secret,
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      secure: config.environment === "prod",
-      maxAge: 24 * 60 * 60 * 1000, // 24 hours
-    },
-  })
-);
-
 //routes import
-import userRouter from "./routes/user.routes.js";
+import userRouter from "./features/user/user.routes.js";
 import healthRouter from "./routes/health.routes.js";
 
 //routes declaration
