@@ -10,6 +10,11 @@ import { upload } from "../../middlewares/multer.middleware.js";
 import { verifyJWT } from "./auth.middleware.js";
 import { validate } from "../../middlewares/validation.middleware.js";
 import { registerSchema, loginSchema } from "./user.validator.js";
+import passport from "./google.strategy.js";
+import { HTTP_STATUS } from "../../constants/httpStatus.js";
+import { config } from "../../config/index.js";
+import apiResponse from "../../utils/apiResponse.js";
+import { UserService } from "./user.service.js";
 
 const userRouter = Router();
 
@@ -23,6 +28,36 @@ userRouter
 userRouter.route("/login").post(validate(loginSchema), loginUser);
 userRouter.route("/refreshAccess").post(refreshAccessToken);
 userRouter.route("/logout").post(logoutUser);
+
+userRouter.get(
+  "/google",
+  passport.authenticate("google", { scope: ["profile", "email"] })
+);
+
+userRouter.get(
+  "/google/callback",
+  passport.authenticate("google", {
+    session: false,
+    failureRedirect: "/login",
+  }),
+  async (req, res) => {
+    try {
+      const { accessToken, refreshToken } = await UserService.generateTokens(
+        req.user._id
+      );
+
+      res
+        .status(HTTP_STATUS.OK)
+        .cookie("accessToken", accessToken, config.cookie)
+        .cookie("refreshToken", refreshToken, config.cookie)
+        .json(new apiResponse(HTTP_STATUS.OK, "User logged in successfully"))
+        .redirect("http://localhost:5173/dashboard");
+    } catch (err) {
+      console.error("Google login error:", err);
+      return res.redirect("http://localhost:5173/login?error=oauth_failed");
+    }
+  }
+);
 
 //Secured Routes
 userRouter.route("/me").get(verifyJWT, getCurrentUser);

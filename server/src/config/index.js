@@ -4,9 +4,14 @@ dotenv.config();
 
 // Validate critical environment variables
 const requiredEnvVars = [
-  'MONGODB_URI',
-  'ACCESS_TOKEN_SECRET',
-  'REFRESH_TOKEN_SECRET'
+  "MONGODB_URI",
+  "ACCESS_TOKEN_SECRET",
+  "REFRESH_TOKEN_SECRET",
+  "CLOUDINARY_CLOUD_NAME",
+  "CLOUDINARY_API_KEY",
+  "CLOUDINARY_API_SECRET",
+  "GOOGLE_CLIENT_ID",
+  "GOOGLE_CLIENT_SECRET",
 ];
 
 for (const envVar of requiredEnvVars) {
@@ -60,5 +65,11 @@ export const config = {
     sameSite: process.env.ENVIRONMENT === "dev" ? "lax" : "none",
     path: "/",
     maxAge: 15 * 24 * 60 * 60 * 1000,
+  },
+
+  google: {
+    clientId: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: "http://localhost:8000/api/v1/users/google/callback",
   },
 };
