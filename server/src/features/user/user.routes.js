@@ -5,6 +5,8 @@ import {
   refreshAccessToken,
   logoutUser,
   getCurrentUser,
+  linkWallet,
+  patchUser,
 } from "./user.controller.js";
 import { upload } from "../../middlewares/multer.middleware.js";
 import { verifyJWT } from "./auth.middleware.js";
@@ -61,5 +63,7 @@ userRouter.get(
 
 //Secured Routes
 userRouter.route("/me").get(verifyJWT, getCurrentUser);
+userRouter.route("/linkWallet").post(verifyJWT, linkWallet);
+userRouter.route("/patch").patch(verifyJWT, upload.single("avatar"), patchUser);
 
 export default userRouter;

@@ -164,10 +164,80 @@ const logoutUser = asyncHandler(async (req, res) => {
     .json(new apiResponse(HTTP_STATUS.OK, {}, "User logged out successfully"));
 });
 
+const linkWallet = asyncHandler(async (req, res) => {
+  const { walletId } = req.body;
+
+  if (!walletId) {
+    throw new apiError(HTTP_STATUS.BAD_REQUEST, "Wallet ID is required");
+  }
+
+  const user = await UserService.findById(req.user._id);
+  if (!user) {
+    throw new apiError(HTTP_STATUS.NOT_FOUND, ERROR_MESSAGES.USER_NOT_FOUND);
+  }
+
+  try {
+    await user.linkWallet(walletId);
+    return res
+      .status(HTTP_STATUS.OK)
+      .json(
+        new apiResponse(
+          HTTP_STATUS.OK,
+          { walletId: user.walletId },
+          "Wallet linked successfully"
+        )
+      );
+  } catch (error) {
+    throw new apiError(
+      HTTP_STATUS.CONFLICT,
+      error.message || "Failed to link wallet"
+    );
+  }
+});
+
+const patchUser = asyncHandler(async (req, res) => {
+  const { phoneNumber } = req.body;
+  let avatar;
+
+  // Handle avatar upload (optional)
+  if (req.files?.avatar?.[0]?.path) {
+    avatar = await UploadService.uploadAvatar(req.files.avatar[0].path);
+  }
+
+  const updates = {};
+  if (phoneNumber) updates.phoneNumber = phoneNumber;
+  if (avatar) updates.avatar = avatar;
+
+  if (Object.keys(updates).length === 0) {
+    throw new apiError(HTTP_STATUS.BAD_REQUEST, "No valid fields to update");
+  }
+
+  const updatedUser = await UserService.updateById(req.user._id, updates);
+
+  if (!updatedUser) {
+    throw new apiError(
+      HTTP_STATUS.INTERNAL_SERVER_ERROR,
+      "Failed to update user details"
+    );
+  }
+
+  return res
+    .status(HTTP_STATUS.OK)
+    .json(
+      new apiResponse(
+        HTTP_STATUS.OK,
+        { user: updatedUser },
+        "User details updated successfully"
+      )
+    );
+});
+
 export {
   getCurrentUser,
   registerUser,
   loginUser,
   refreshAccessToken,
   logoutUser,
+  linkWallet,
+  patchUser,
 };

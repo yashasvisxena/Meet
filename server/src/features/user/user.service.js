@@ -34,6 +34,10 @@ export class UserService {
     return userWithoutSensitiveData;
   }
 
+  static async updateById(userId, updates) {
+    return User.findByIdAndUpdate(userId, updates, { new: true });
+  }
+
   static async updateRefreshToken(userId, refreshToken) {
     return await User.findByIdAndUpdate(
       userId,
