@@ -47,7 +47,7 @@ const organisationSchema = new Schema(
 
     settings: {
       allowGuestUsers: { type: Boolean, default: false },
-      maxMembers: { type: Number, default: 100 },
+      maxMembers: { type: Number, default: 0 }, // 0 means unlimited
     },
 
     meetings: [{ type: Schema.Types.ObjectId, ref: "Meeting" }],
@@ -77,5 +77,12 @@ organisationSchema.pre("save", function (next) {
   }
   next();
 });
+
+organisationSchema.path("roles").validate(function (roles) {
+  const names = roles.map((r) => r.name.toLowerCase());
+  return names.length === new Set(names).size;
+}, "Duplicate roles are not allowed");
+
+organisationSchema.index({ _id: 1, "members.user": 1 });
 
 export const Organisation = mongoose.model("Organisation", organisationSchema);

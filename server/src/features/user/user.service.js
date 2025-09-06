@@ -5,7 +5,7 @@ import { HTTP_STATUS, ERROR_MESSAGES } from "../../constants/httpStatus.js";
 export class UserService {
   static async findByEmailOrPhone(email, phoneNumber) {
     const conditions = [{ email }];
-    if (phoneNumber) {
+    if (phoneNumber && phoneNumber.trim() !== "") {
       conditions.push({ phoneNumber });
     }
     return await User.findOne({ $or: conditions });
@@ -28,13 +28,14 @@ export class UserService {
   }
 
   static async createUser(userData) {
-    // Remove phoneNumber if it's empty or null to avoid unique constraint issues
-    if (!userData.phoneNumber) {
-      delete userData.phoneNumber;
-    }
     const user = await User.create(userData);
     const { password, refreshToken, ...userWithoutSensitiveData } =
       user.toObject();
+
+    if (!userWithoutSensitiveData.phoneNumber) {
+      userWithoutSensitiveData.phoneNumber = null;
+    }
+
     return userWithoutSensitiveData;
   }
 

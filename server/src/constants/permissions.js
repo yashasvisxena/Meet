@@ -11,9 +11,7 @@ const ORGANISATION_PERMISSIONS = {
     canCreateMeetings: "canCreateMeetings",
     canEditMeetings: "canEditMeetings",
     canDeleteMeetings: "canDeleteMeetings",
-    canStartMeetings: "canStartMeetings",
     canEndMeetings: "canEndMeetings",
-    canJoinMeetings: "canJoinMeetings",
   },
   RECORDING: {
     canRecordMeetings: "canRecordMeetings",

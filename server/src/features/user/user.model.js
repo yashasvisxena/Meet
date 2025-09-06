@@ -27,7 +27,6 @@ const userSchema = new Schema(
       required: false,
       unique: true,
       sparse: true,
-      default: null,
     },
 
     // Wallet ID (optional, linked after signup, must remain unique)
@@ -44,6 +43,7 @@ const userSchema = new Schema(
       required: function () {
         return !this.isGoogleUser;
       },
+      select: false,
     },
 
     // Google OAuth ID (present if user signed up via Google)
@@ -68,6 +68,7 @@ const userSchema = new Schema(
     // Refresh token for session management
     refreshToken: {
       type: String,
+      select: false,
     },
 
     organisations: [{ type: Schema.Types.ObjectId, ref: "Organisation" }],
@@ -159,7 +160,7 @@ userSchema.methods.generateRefreshToken = function () {
  */
 userSchema.methods.linkWallet = async function (walletId) {
   if (this.walletId) {
-    throw new Error("Wallet already linked to this account.");
+    throw new Error("A Wallet already linked to this account.");
   }
 
   const existingUser = await mongoose.models.User.findOne({ walletId });
@@ -171,5 +172,9 @@ userSchema.methods.linkWallet = async function (walletId) {
   await this.save();
   return this;
 };
+
+userSchema.index({ email: 1 });
+userSchema.index({ phoneNumber: 1 }, { sparse: true });
+userSchema.index({ walletId: 1 }, { sparse: true });
 
 export const User = mongoose.model("User", userSchema);
