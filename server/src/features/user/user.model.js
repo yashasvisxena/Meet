@@ -27,6 +27,7 @@ const userSchema = new Schema(
       required: false,
       unique: true,
       sparse: true,
+      default: null,
     },
 
     // Wallet ID (optional, linked after signup, must remain unique)

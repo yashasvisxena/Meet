@@ -4,7 +4,11 @@ import { HTTP_STATUS, ERROR_MESSAGES } from "../../constants/httpStatus.js";
 
 export class UserService {
   static async findByEmailOrPhone(email, phoneNumber) {
-    return await User.findOne({ $or: [{ phoneNumber }, { email }] });
+    const conditions = [{ email }];
+    if (phoneNumber) {
+      conditions.push({ phoneNumber });
+    }
+    return await User.findOne({ $or: conditions });
   }
 
   static async findByEmail(email) {
