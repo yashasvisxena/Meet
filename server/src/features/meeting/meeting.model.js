@@ -113,4 +113,4 @@ meetingSchema.index({ startDateTime: 1, endDateTime: 1 });
 meetingSchema.index({ organisation: 1 });
 meetingSchema.index({ host: 1 });
 
-export default mongoose.model("Meeting", meetingSchema);
+export const Meeting = mongoose.model("Meeting", meetingSchema);
