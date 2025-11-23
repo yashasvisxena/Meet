@@ -9,7 +9,7 @@ import {
   patchUser,
 } from "./user.controller.js";
 import { upload } from "../../middlewares/multer.middleware.js";
-import { verifyJWT } from "./auth.middleware.js";
+import { verifyJWT } from "../../middlewares/auth.middleware.js";
 import { validate } from "../../middlewares/validation.middleware.js";
 import { registerSchema, loginSchema } from "./user.validator.js";
 import passport from "./google.strategy.js";
