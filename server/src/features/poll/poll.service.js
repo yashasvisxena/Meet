@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { Vote } from "../models/Vote.js";
+import { Vote } from "./votes.model.js";
 import { Poll } from "./poll.model.js";
 
 /**
