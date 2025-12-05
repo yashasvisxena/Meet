@@ -1,67 +1,47 @@
-import { User } from "../models/user.model.js";
+import { userRepository } from "../repositories/UserRepository.js";
 import apiError from "../utils/apiError.js";
 import { HTTP_STATUS, ERROR_MESSAGES } from "../constants/httpStatus.js";
 
 export class UserService {
   static async findByEmailOrPhone(email, phoneNumber) {
-    const conditions = [{ email }];
-    if (phoneNumber && phoneNumber.trim() !== "") {
-      conditions.push({ phoneNumber });
-    }
-    return await User.findOne({ $or: conditions });
+    return await userRepository.findByEmailOrPhone(email, phoneNumber);
   }
 
   static async findByEmail(email) {
-    return await User.findOne({ email });
+    return await userRepository.findByEmail(email);
   }
 
   static async findByGoogleId(googleId) {
-    return await User.findOne({ googleId });
+    return await userRepository.findByGoogleId(googleId);
   }
 
   static async findByEmailOrGoogleId(email, googleId) {
-    return await User.findOne({ $or: [{ email }, { googleId }] });
+    return await userRepository.findByEmailOrGoogleId(email, googleId);
   }
 
   static async findById(id) {
-    return await User.findById(id).select("-password -refreshToken");
+    return await userRepository.findByIdSafe(id);
   }
 
   static async createUser(userData) {
-    const user = await User.create(userData);
-    const { password, refreshToken, ...userWithoutSensitiveData } =
-      user.toObject();
-
-    if (!userWithoutSensitiveData.phoneNumber) {
-      userWithoutSensitiveData.phoneNumber = null;
-    }
-
-    return userWithoutSensitiveData;
+    return await userRepository.createUser(userData);
   }
 
   static async updateById(userId, updates) {
-    return User.findByIdAndUpdate(userId, updates, { new: true });
+    return await userRepository.updateById(userId, updates);
   }
 
   static async updateRefreshToken(userId, refreshToken) {
-    return await User.findByIdAndUpdate(
-      userId,
-      { refreshToken },
-      { new: true, validateBeforeSave: false }
-    );
+    return await userRepository.updateRefreshToken(userId, refreshToken);
   }
 
   static async clearRefreshToken(userId) {
-    return await User.findByIdAndUpdate(
-      userId,
-      { $unset: { refreshToken: 1 } },
-      { new: true }
-    );
+    return await userRepository.clearRefreshToken(userId);
   }
 
   static async generateTokens(userId) {
     try {
-      const user = await User.findById(userId);
+      const user = await userRepository.findById(userId);
       if (!user) {
         throw new apiError(
           HTTP_STATUS.NOT_FOUND,
@@ -72,10 +52,11 @@ export class UserService {
       const accessToken = user.generateAccessToken();
       const refreshToken = user.generateRefreshToken();
 
-      await this.updateRefreshToken(userId, refreshToken);
+      await userRepository.updateRefreshToken(userId, refreshToken);
 
       return { accessToken, refreshToken };
     } catch (error) {
+      if (error instanceof apiError) throw error;
       throw new apiError(
         HTTP_STATUS.INTERNAL_SERVER_ERROR,
         "Token generation failed"
