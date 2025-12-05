@@ -7,16 +7,16 @@ import {
   getCurrentUser,
   linkWallet,
   patchUser,
-} from "./user.controller.js";
-import { upload } from "../../middlewares/multer.middleware.js";
-import { verifyJWT } from "../../middlewares/auth.middleware.js";
-import { validate } from "../../middlewares/validation.middleware.js";
-import { registerSchema, loginSchema } from "./user.validator.js";
-import passport from "./google.strategy.js";
-import { HTTP_STATUS } from "../../constants/httpStatus.js";
-import { config } from "../../config/index.js";
-import apiResponse from "../../utils/apiResponse.js";
-import { UserService } from "./user.service.js";
+} from "../features/user/user.controller.js";
+import { upload } from "../middlewares/multer.middleware.js";
+import { verifyJWT } from "../middlewares/auth.middleware.js";
+import { validate } from "../middlewares/validation.middleware.js";
+import { registerSchema, loginSchema } from "../validators/user.validator.js";
+import passport from "../strategy/google.strategy.js";
+import { HTTP_STATUS } from "../constants/httpStatus.js";
+import { config } from "../config/index.js";
+import apiResponse from "../utils/apiResponse.js";
+import { UserService } from "../services/user.service.js";
 
 const userRouter = Router();
 

@@ -1,9 +1,9 @@
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
-import { UserService } from "./user.service.js";
-import { config } from "../../config/index.js";
-import apiError from "../../utils/apiError.js";
-import { HTTP_STATUS } from "../../constants/httpStatus.js";
+import { UserService } from "../services/user.service.js";
+import { config } from "../config/index.js";
+import apiError from "../utils/apiError.js";
+import { HTTP_STATUS } from "../constants/httpStatus.js";
 
 passport.use(
   new GoogleStrategy(

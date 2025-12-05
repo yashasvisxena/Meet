@@ -5,7 +5,7 @@ import logger from "../../utils/logger.js";
 import jwt from "jsonwebtoken";
 import { config } from "../../config/index.js";
 import { HTTP_STATUS, ERROR_MESSAGES } from "../../constants/httpStatus.js";
-import { UserService } from "./user.service.js";
+import { UserService } from "../../services/user.service.js";
 import { UploadService } from "../../services/upload.service.js";
 
 const getCurrentUser = asyncHandler(async (req, res) => {

@@ -1,6 +1,6 @@
-import { User } from "./user.model.js";
-import apiError from "../../utils/apiError.js";
-import { HTTP_STATUS, ERROR_MESSAGES } from "../../constants/httpStatus.js";
+import { User } from "../models/user.model.js";
+import apiError from "../utils/apiError.js";
+import { HTTP_STATUS, ERROR_MESSAGES } from "../constants/httpStatus.js";
 
 export class UserService {
   static async findByEmailOrPhone(email, phoneNumber) {
