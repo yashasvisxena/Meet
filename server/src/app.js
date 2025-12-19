@@ -38,7 +38,7 @@ app.use(express.static("public"));
 app.use(cookieParser());
 
 //routes import
-import userRouter from "./features/user/user.routes.js";
+import userRouter from "./routes/user.routes.js";
 import healthRouter from "./routes/health.routes.js";
 
 //routes declaration

@@ -1,12 +1,12 @@
-import { asyncHandler } from "../../utils/asyncHandler.js";
-import apiError from "../../utils/apiError.js";
-import apiResponse from "../../utils/apiResponse.js";
-import logger from "../../utils/logger.js";
+import { asyncHandler } from "../../src/utils/asyncHandler.js";
+import apiError from "../../src/utils/apiError.js";
+import apiResponse from "../../src/utils/apiResponse.js";
+import logger from "../../src/utils/logger.js";
 import jwt from "jsonwebtoken";
-import { config } from "../../config/index.js";
-import { HTTP_STATUS, ERROR_MESSAGES } from "../../constants/httpStatus.js";
-import { UserService } from "../../services/user.service.js";
-import { UploadService } from "../../services/upload.service.js";
+import { config } from "../../src/config/index.js";
+import { HTTP_STATUS, ERROR_MESSAGES } from "../../src/constants/httpStatus.js";
+import { UserService } from "../../src/services/user.service.js";
+import { UploadService } from "../../src/services/upload.service.js";
 
 
 /**

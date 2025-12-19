@@ -7,7 +7,7 @@ import {
   getCurrentUser,
   linkWallet,
   patchUser,
-} from "../features/user/user.controller.js";
+} from "../controllers/user.controller.js";
 import { upload } from "../middlewares/multer.middleware.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 import { validate } from "../middlewares/validation.middleware.js";
